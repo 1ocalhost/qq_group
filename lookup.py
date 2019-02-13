@@ -30,9 +30,13 @@ class LocalFileReader(IFileReader):
 
 
 class OneDriveReader(IFileReader):
-    def __init__(self):
+    def __init__(self, cookie=None):
         self.load_config()
-        self.init_access()
+
+        if cookie is None:
+            self.init_access()
+        else:
+            self.cookie = cookie
 
     def load_config(self):
         with open('auth.json') as f:
@@ -74,8 +78,8 @@ class OneDriveReader(IFileReader):
 
 
 class GroupData:
-    def __init__(self):
-        self.file = OneDriveReader()
+    def __init__(self, *args, **kwargs):
+        self.file = OneDriveReader(*args, **kwargs)
 
     def has_info_with_id(self, full_id):
         prefix = int(full_id[0:3])
